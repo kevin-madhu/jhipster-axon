@@ -1,0 +1,10 @@
+{
+  "generator-jhipster-blueprint": {
+    "promptValues": {
+      "githubName": "kevin-madhu",
+      "authorName": "Kevin Madhu",
+      "authorEmail": "kevin.madhu@gmail.com",
+      "authorUrl": "https://github.com/kevin-madhu/jhipster-axon#readme"
+    }
+  }
+}
