@@ -20,6 +20,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const ServerGenerator = require('generator-jhipster/generators/server');
+const writeFiles = require('./files').writeFiles;
 
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
@@ -94,8 +95,10 @@ module.exports = class extends ServerGenerator {
     }
 
     get writing() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._writing();
+        const phaseFromJHipster = super._writing();
+        const myCustomPhaseSteps = writeFiles();
+
+        return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
     }
 
     get install() {
