@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const AppGenerator = require('generator-jhipster/generators/app');
+const prompts = require('./prompts');
 
 module.exports = class extends AppGenerator {
     constructor(args, opts) {
@@ -16,49 +17,26 @@ module.exports = class extends AppGenerator {
     }
 
     get initializing() {
-        /**
-         * Any method beginning with _ can be reused from the superclass `AppGenerator`
-         *
-         * There are multiple ways to customize a phase from JHipster.
-         *
-         * 1. Let JHipster handle a phase, blueprint doesnt override anything.
-         * ```
-         *      return super._initializing();
-         * ```
-         *
-         * 2. Override the entire phase, this is when the blueprint takes control of a phase
-         * ```
-         *      return {
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *          myAnotherCustomInitPhaseStep(){
-         *              // Do all your stuff here
-         *          }
-         *      };
-         * ```
-         *
-         * 3. Partially override a phase, this is when the blueprint gets the phase from JHipster and customizes it.
-         * ```
-         *      const phaseFromJHipster = super._initializing();
-         *      const myCustomPhaseSteps = {
-         *          displayLogo() {
-         *              // override the displayLogo method from the _initializing phase of JHipster
-         *          },
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *      }
-         *      return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
-         * ```
-         */
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._initializing();
+        const phaseFromJHipster = super._initializing();
+        const myCustomPhaseSteps = {
+            getBlueprintConfig() {
+                this.applicationLanguage = this.blueprintConfig.get('applicationLanguage')
+            }
+        }
+
+        return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
     }
 
     get prompting() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._prompting();
+        const phaseFromJHipster = super._prompting();
+        const myCustomPhaseSteps = {
+            askForApplicationLanguage: prompts.askForApplicationLanguage,
+            saveBlueprintConfig() {
+                this.blueprintConfig.set('applicationLanguage', this.applicationLanguage);
+            }
+        }
+
+        return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
     }
 
     get configuring() {
