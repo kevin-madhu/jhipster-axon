@@ -47,5 +47,5 @@ async function askForApplicationLanguage() {
             default: generatorDefaults.applicationLanguage,
         },
     ]);
-    this.applicationLanguage = this.jhipsterConfig.applicationLanguage = answers.applicationLanguage;
+    this.applicationLanguage = this.configOptions.applicationLanguage = answers.applicationLanguage;
 }

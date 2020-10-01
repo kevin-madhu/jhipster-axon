@@ -59,7 +59,27 @@ module.exports = class extends AppGenerator {
     }
 
     get configuring() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
+        const phaseFromJHipster = super._configuring();
+        const myCustomPhaseSteps = {
+            composeServer() {
+                if (this.skipServer || this.configOptions.skipComposeServer) return;
+                this.configOptions.skipComposeServer = true;
+                const options = this.options;
+                const configOptions = this.configOptions;
+
+                this.composeWith(require.resolve('generator-jhipster-kotlin/generators/server'), {
+                    ...options,
+                    configOptions,
+                    'client-hook': !this.skipClient,
+                    debug: this.isDebugEnabled,
+                });
+            },
+        }
+
+        if(this.applicationLanguage === 'kotlin') {
+            return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
+        }
+
         return super._configuring();
     }
 
